@@ -20,6 +20,8 @@ class MappersJob2 extends Mapper[LongWritable, Text, Text, IntWritable] {
   val path = new Path("/input/LogFileGenerator.2021-10-06.log")
   val stream = hdfs.open(path)
 
+  val timeInterval = HelperUtils.Parameters.timeInterval
+
   def readLines = Stream.cons(stream.readLine, Stream.continually(stream.readLine))
 
   val one = new IntWritable(1)
@@ -28,13 +30,43 @@ class MappersJob2 extends Mapper[LongWritable, Text, Text, IntWritable] {
     val pattern = HelperUtils.Parameters.generatingPattern.r
     readLines.takeWhile(_ != null).foreach(line => {
       if (pattern.findFirstIn(line) != None) {
-        val s = line.split(" - ").map(_.trim)
-        val s1 = s(0).replace("  ", " ").split(" ").map(_.trim)
-        if(s1(2).equals("ERROR"))
+        val logEntry = line.split(" - ").map(_.trim)
+        val logParser = logEntry(0).replace("  ", " ").split(" ").map(_.trim)
+        if(logParser(2).equals("ERROR"))
         {
-          val time = s1(0).split(':').map(_.trim)
-          val hh_min = time(0) +":"+ time(1)
-          context.write(new Text(hh_min), one)
+          val logTime = logParser(0).split(':').map(_.trim)
+          val logHour = logTime(0).toInt
+          val logMin = logTime(1).toInt
+          if(logMin < 10)
+          {
+            val timeKey5 = logHour.toString.concat(":05")
+            context.write(new Text(timeKey5), one)
+          }
+          else if (logMin < 15)
+          {
+            val timeKey10 = logHour.toString.concat(":10")
+            context.write(new Text(timeKey10), one)
+          }
+          else if (logMin < 20)
+          {
+            val timeKey10 = logHour.toString.concat(":15")
+            context.write(new Text(timeKey10), one)
+          }
+          else if (logMin < 25)
+          {
+            val timeKey10 = logHour.toString.concat(":20")
+            context.write(new Text(timeKey10), one)
+          }
+//          if(logMin < 30)
+//          {
+//            val timeKey30 = logHour.toString.concat(":00")
+//            context.write(new Text(timeKey30), one)
+//          }
+//          else
+//          {
+//            val timeKey60 = logHour.toString.concat(":30")
+//            context.write(new Text(timeKey60), one)
+//          }
         }
       }
     })

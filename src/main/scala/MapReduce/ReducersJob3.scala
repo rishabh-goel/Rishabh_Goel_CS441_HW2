@@ -16,8 +16,8 @@ class ReducersJob3 extends Reducer[Text, IntWritable, Text, IntWritable] {
   override def reduce(key: Text, values: lang.Iterable[IntWritable], context: Reducer[Text, IntWritable, Text, IntWritable]#Context): Unit = {
     logger.info("Executing reducer to display total count of input from mapper completed")
     //Calculate the sum of each value for a key
-    val maxVal = values.asScala.reduceLeft((x,y) => if (x > y) x else y)
-    context.write(key, maxVal)
+    val sum = values.asScala.foldLeft(0)(_ + _.get)
+    context.write(key, new IntWritable(sum))
     logger.info("Reducer execution completed")
   }
 }

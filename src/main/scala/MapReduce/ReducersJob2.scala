@@ -17,11 +17,11 @@ class ReducersJob2 extends Reducer[Text, IntWritable, Text, IntWritable] {
     logger.info("Executing reducer to display total count of input from mapper completed")
     //Calculate the sum of each value for a key
     val sum = values.asScala.foldLeft(0)(_ + _.get)
-    map2 += (key -> sum)
+//    map2 += (key -> sum)
+//    val listMap = ListMap(map2.toSeq.sortWith(_._2 > _._2):_*)
+//    listMap.foreach(x => context.write(new Text(x._1), new IntWritable(x._2)))
 
-    val listMap = ListMap(map2.toSeq.sortWith(_._2 > _._2):_*)
-
-    listMap.foreach(x => context.write(new Text(x._1), new IntWritable(x._2)))
+    context.write(new Text(key), new IntWritable(sum))
     logger.info("Reducer execution completed")
   }
 }

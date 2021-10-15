@@ -33,11 +33,11 @@ object RunJobs {
     val job1 = Job.getInstance(new Configuration(), "basic")
     job1.setJarByClass(this.getClass)
     //Setting mapper
-    job1.setMapperClass(classOf[Mappers])
-    job1.setCombinerClass(classOf[Reducers])
+    job1.setMapperClass(classOf[MappersJob1])
+    job1.setCombinerClass(classOf[ReducersJob1])
 
     //Setting reducer
-    job1.setReducerClass(classOf[Reducers])
+    job1.setReducerClass(classOf[ReducersJob1])
     job1.setOutputKeyClass(classOf[Text])
     job1.setOutputValueClass(classOf[IntWritable])
 
@@ -45,41 +45,60 @@ object RunJobs {
     FileOutputFormat.setOutputPath(job1, new Path(args(1) + "/Job1"))
     job1.waitForCompletion(true)
 
-//    logger.info("----------------------------------Starting Job 2------------------------------------------------")
-//    // Job 2: Compute time intervals sorted in the descending order that contained most log messages of the type ERROR
-//    // with injected regex pattern string instances.
-//    val job2 = Job.getInstance(new Configuration(), "basic2")
-//    job2.setJarByClass(this.getClass)
-//    //Setting mapper
-//    job2.setMapperClass(classOf[MappersJob2])
-//    job2.setCombinerClass(classOf[ReducersJob2])
-//
-//    //Setting reducer
-//    job2.setReducerClass(classOf[ReducersJob2])
-//    job2.setOutputKeyClass(classOf[Text])
-//    job2.setOutputValueClass(classOf[IntWritable])
-//
-//    FileInputFormat.addInputPath(job2, new Path(args(0)))
-//    FileOutputFormat.setOutputPath(job2, new Path(args(1) + "/Job2"))
-//    job2.waitForCompletion(true)
-//
-//
-//    logger.info("----------------------------------Starting Job 3------------------------------------------------")
-//    // Job 1: Distribution of diff type of msg across predefined time interval and
-//    // injected string instances of the designated regex pattern for these log message type
-//    val job3 = Job.getInstance(new Configuration(), "basic3")
-//    job3.setJarByClass(this.getClass)
-//    //Setting mapper
-//    job3.setMapperClass(classOf[MappersJob3])
-//    job3.setCombinerClass(classOf[ReducersJob3])
-//
-//    //Setting reducer
-//    job3.setReducerClass(classOf[ReducersJob3])
-//    job3.setOutputKeyClass(classOf[Text])
-//    job3.setOutputValueClass(classOf[IntWritable])
-//
-//    FileInputFormat.addInputPath(job3, new Path(args(0)))
-//    FileOutputFormat.setOutputPath(job3, new Path(args(1) + "/Job3"))
-//    job3.waitForCompletion(true)
+    logger.info("----------------------------------Starting Job 2------------------------------------------------")
+    // Job 2: Compute time intervals sorted in the descending order that contained most log messages of the type ERROR
+    // with injected regex pattern string instances.
+    val job2 = Job.getInstance(new Configuration(), "basic2")
+    job2.setJarByClass(this.getClass)
+    //Setting mapper
+    job2.setMapperClass(classOf[MappersJob2])
+    job2.setCombinerClass(classOf[ReducersJob2])
+
+    //Setting reducer
+    job2.setReducerClass(classOf[ReducersJob2])
+    job2.setOutputKeyClass(classOf[Text])
+    job2.setOutputValueClass(classOf[IntWritable])
+
+    FileInputFormat.addInputPath(job2, new Path(args(0)))
+    FileOutputFormat.setOutputPath(job2, new Path(args(1) + "/Job2"))
+    job2.waitForCompletion(true)
+
+
+    logger.info("----------------------------------Starting Job 3------------------------------------------------")
+    // Job 3: Distribution of diff type of msg across predefined time interval and
+    // injected string instances of the designated regex pattern for these log message type
+    val job3 = Job.getInstance(new Configuration(), "basic3")
+    job3.setJarByClass(this.getClass)
+    //Setting mapper
+    job3.setMapperClass(classOf[MappersJob3])
+    job3.setCombinerClass(classOf[ReducersJob3])
+
+    //Setting reducer
+    job3.setReducerClass(classOf[ReducersJob3])
+    job3.setOutputKeyClass(classOf[Text])
+    job3.setOutputValueClass(classOf[IntWritable])
+
+    FileInputFormat.addInputPath(job3, new Path(args(0)))
+    FileOutputFormat.setOutputPath(job3, new Path(args(1) + "/Job3"))
+    job3.waitForCompletion(true)
+
+
+    logger.info("----------------------------------Starting Job 4------------------------------------------------")
+    // Job 4: Distribution of diff type of msg across predefined time interval and
+    // injected string instances of the designated regex pattern for these log message type
+    val job4 = Job.getInstance(new Configuration(), "basic4")
+    job4.setJarByClass(this.getClass)
+    //Setting mapper
+    job4.setMapperClass(classOf[MappersJob4])
+    job4.setCombinerClass(classOf[ReducersJob4])
+
+    //Setting reducer
+    job4.setReducerClass(classOf[ReducersJob4])
+    job4.setOutputKeyClass(classOf[Text])
+    job4.setOutputValueClass(classOf[IntWritable])
+
+    FileInputFormat.addInputPath(job4, new Path(args(0)))
+    FileOutputFormat.setOutputPath(job4, new Path(args(1) + "/Job4"))
+    job4.waitForCompletion(true)
   }
 }

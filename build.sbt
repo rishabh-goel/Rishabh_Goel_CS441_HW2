@@ -1,4 +1,4 @@
-name := "LogFileGenerator"
+name := "Rishabh_Goel_CS441_HW2"
 
 version := "0.1"
 

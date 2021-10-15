@@ -6,7 +6,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import java.lang
 import scala.collection.JavaConverters.*
 
-class Reducers extends Reducer[Text, IntWritable, Text, IntWritable]{
+class ReducersJob1 extends Reducer[Text, IntWritable, Text, IntWritable]{
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
   override def reduce(key: Text, values: lang.Iterable[IntWritable], context: Reducer[Text, IntWritable, Text, IntWritable]#Context): Unit = {
