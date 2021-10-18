@@ -18,29 +18,23 @@ import scala.util.{Failure, Success, Try}
 class MappersJob1 extends Mapper[LongWritable, Text, Text, IntWritable] {
 
   val logger: Logger = LoggerFactory.getLogger(this.getClass.getSimpleName)
-  val hdfs = FileSystem.get(new URI("hdfs://localhost:8020/"), new Configuration())
-  val path = new Path("/input/LogFileGenerator.2021-10-06.log")
-  val stream = hdfs.open(path)
+
   val pattern = HelperUtils.Parameters.generatingPattern.r
 
   val r = new scala.util.Random
-  val hrs_start = 21+r.nextInt(1)
-  val mins_start = r.nextInt(45)
-  val sec_start = r.nextInt(45)
-  val mins_end = mins_start + HelperUtils.Parameters.timeInterval
-  val time = String.valueOf(hrs_start).concat(":".concat(String.valueOf(mins_start).concat(":".concat(String.valueOf(sec_start)))))
-
-  logger.info("Time is = " + time)
-
-  def readLines = Stream.cons(stream.readLine, Stream.continually(stream.readLine))
 
   val one = new IntWritable(1)
 
   override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, Text, IntWritable]#Context): Unit = {
 
-    readLines.takeWhile(_ != null).foreach(line => {
-      if (pattern.findFirstIn(line) != None) {
+    val fileContent = value.toString.split("\n").toList
+    val first_entry = fileContent.head
+    val hrs_start = first_entry.take(2).toInt
+    val mins_start = first_entry.substring(3, 5).toInt
+    val mins_end = mins_start + HelperUtils.Parameters.timeInterval
 
+    fileContent.foreach(line => {
+      if (pattern.findFirstIn(line) != None) {
         val logEntry = line.split(" - ").map(_.trim)
         val logParser = logEntry(0).replace("  ", " ").split(" ").map(_.trim)
         val logTime = logParser(0).split(':').map(_.trim)

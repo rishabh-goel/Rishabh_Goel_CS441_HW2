@@ -16,20 +16,15 @@ import scala.util.{Failure, Success, Try}
 
 class MappersJob2 extends Mapper[Object, Text, Text, Text] {
   val logger: Logger = LoggerFactory.getLogger(this.getClass.getSimpleName)
-  val hdfs = FileSystem.get(new URI("hdfs://localhost:8020/"), new Configuration())
-  val path = new Path("/input/LogFileGenerator.2021-10-06.log")
-  val stream = hdfs.open(path)
 
   val timeInterval = HelperUtils.Parameters.timeInterval
-
-  def readLines = Stream.cons(stream.readLine, Stream.continually(stream.readLine))
-
-  //val one = new IntWritable(1)
+  
   val one = new Text("1")
 
   override def map(key: Object, value: Text, context: Mapper[Object, Text, Text, Text]#Context): Unit = {
     val pattern = HelperUtils.Parameters.generatingPattern.r
-    readLines.takeWhile(_ != null).foreach(line => {
+    val fileContent = value.toString.split("\n").toList
+    fileContent.foreach(line => {
       if (pattern.findFirstIn(line) != None) {
         val logEntry = line.split(" - ").map(_.trim)
         val logParser = logEntry(0).replace("  ", " ").split(" ").map(_.trim)

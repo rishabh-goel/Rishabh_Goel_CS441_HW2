@@ -19,14 +19,6 @@ object RunJobs {
 
     val logger = CreateLogger(classOf[RunJobs.type])
 
-    //  val logFuture = Future {
-    //    LogMsgSimulator(init(RandomStringGenerator((Parameters.minStringLength, Parameters.maxStringLength), Parameters.randomSeed)), Parameters.maxCount)
-    //  }
-    //  Try(Await.result(logFuture, Parameters.runDurationInMinutes)) match {
-    //    case Success(value) => logger.info(s"Log data generation has completed after generating ${Parameters.maxCount} records.")
-    //    case Failure(exception) => logger.info(s"Log data generation has completed within the allocated time, ${Parameters.runDurationInMinutes}")
-    //  }
-
     logger.info("----------------------------------Starting Job 1------------------------------------------------")
     // Job 1: Distribution of diff type of msg across predefined time interval and
     // injected string instances of the designated regex pattern for these log message type
@@ -44,6 +36,7 @@ object RunJobs {
     FileInputFormat.addInputPath(job1, new Path(args(0)))
     FileOutputFormat.setOutputPath(job1, new Path(args(1) + "/Job1"))
     job1.waitForCompletion(true)
+
 
     logger.info("----------------------------------Starting Job 2------------------------------------------------")
     // Job 2: Compute time intervals sorted in the descending order that contained most log messages of the type ERROR
@@ -70,7 +63,7 @@ object RunJobs {
     job2_2.setJarByClass(this.getClass)
     //Setting mapper
     job2_2.setMapperClass(classOf[MappersJob2_2])
-    //job2_2.setCombinerClass(classOf[ReducersJob2_2])
+    job2_2.setSortComparatorClass(classOf[ValueComparator])
     job2_2.setMapOutputKeyClass(classOf[Text])
     job2_2.setMapOutputValueClass(classOf[Text])
 
@@ -82,7 +75,6 @@ object RunJobs {
     FileInputFormat.addInputPath(job2_2, new Path(args(1) + "/IntermediateResult"))
     FileOutputFormat.setOutputPath(job2_2, new Path(args(1) + "/Job2"))
     job2_2.waitForCompletion(true)
-
 
     logger.info("----------------------------------Starting Job 3------------------------------------------------")
     // Job 3: Distribution of diff type of msg across predefined time interval and
@@ -120,5 +112,6 @@ object RunJobs {
     FileInputFormat.addInputPath(job4, new Path(args(0)))
     FileOutputFormat.setOutputPath(job4, new Path(args(1) + "/Job4"))
     job4.waitForCompletion(true)
+
   }
 }

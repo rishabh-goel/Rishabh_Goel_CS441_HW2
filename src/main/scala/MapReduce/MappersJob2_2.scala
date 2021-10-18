@@ -15,7 +15,7 @@ class MappersJob2_2 extends Mapper[Object, Text, Text, Text]{
     val text = value.toString.split("\t")
     val k = text(0)
     val v = text(1)
-    logger.info(k.toString + "->" + v.toString)
+    logger.info(v.toString + "->" + k.toString)
     context.write(new Text(v), new Text(k))
   }
 }
