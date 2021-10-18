@@ -52,16 +52,36 @@ object RunJobs {
     job2.setJarByClass(this.getClass)
     //Setting mapper
     job2.setMapperClass(classOf[MappersJob2])
-    job2.setCombinerClass(classOf[ReducersJob2])
+    //job2.setCombinerClass(classOf[MappersJob2])
+    job2.setMapOutputKeyClass(classOf[Text])
+    job2.setMapOutputValueClass(classOf[Text])
 
     //Setting reducer
     job2.setReducerClass(classOf[ReducersJob2])
     job2.setOutputKeyClass(classOf[Text])
-    job2.setOutputValueClass(classOf[IntWritable])
+    job2.setOutputValueClass(classOf[Text])
 
     FileInputFormat.addInputPath(job2, new Path(args(0)))
-    FileOutputFormat.setOutputPath(job2, new Path(args(1) + "/Job2"))
+    FileOutputFormat.setOutputPath(job2, new Path(args(1) + "/IntermediateResult"))
     job2.waitForCompletion(true)
+
+    logger.info("----------------------------------Starting Job 2.2------------------------------------------------")
+    val job2_2 = Job.getInstance(new Configuration(), "basic2")
+    job2_2.setJarByClass(this.getClass)
+    //Setting mapper
+    job2_2.setMapperClass(classOf[MappersJob2_2])
+    //job2_2.setCombinerClass(classOf[ReducersJob2_2])
+    job2_2.setMapOutputKeyClass(classOf[Text])
+    job2_2.setMapOutputValueClass(classOf[Text])
+
+    //Setting reducer
+    job2_2.setReducerClass(classOf[ReducersJob2_2])
+    job2_2.setOutputKeyClass(classOf[Text])
+    job2_2.setOutputValueClass(classOf[Text])
+
+    FileInputFormat.addInputPath(job2_2, new Path(args(1) + "/IntermediateResult"))
+    FileOutputFormat.setOutputPath(job2_2, new Path(args(1) + "/Job2"))
+    job2_2.waitForCompletion(true)
 
 
     logger.info("----------------------------------Starting Job 3------------------------------------------------")
