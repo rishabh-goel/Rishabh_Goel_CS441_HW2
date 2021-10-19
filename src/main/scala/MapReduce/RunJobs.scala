@@ -24,12 +24,14 @@ object RunJobs {
     // injected string instances of the designated regex pattern for these log message type
     val job1 = Job.getInstance(new Configuration(), "basic")
     job1.setJarByClass(this.getClass)
+
     //Setting mapper
     job1.setMapperClass(classOf[MappersJob1])
+    //Setting mapper
     job1.setCombinerClass(classOf[ReducersJob1])
-
     //Setting reducer
     job1.setReducerClass(classOf[ReducersJob1])
+
     job1.setOutputKeyClass(classOf[Text])
     job1.setOutputValueClass(classOf[IntWritable])
 
@@ -43,32 +45,39 @@ object RunJobs {
     // with injected regex pattern string instances.
     val job2 = Job.getInstance(new Configuration(), "basic2")
     job2.setJarByClass(this.getClass)
+
     //Setting mapper
     job2.setMapperClass(classOf[MappersJob2])
-    //job2.setCombinerClass(classOf[MappersJob2])
+    //Setting mapper output key and value class
     job2.setMapOutputKeyClass(classOf[Text])
     job2.setMapOutputValueClass(classOf[Text])
 
     //Setting reducer
     job2.setReducerClass(classOf[ReducersJob2])
+    //Setting output key and value class
     job2.setOutputKeyClass(classOf[Text])
     job2.setOutputValueClass(classOf[Text])
 
     FileInputFormat.addInputPath(job2, new Path(args(0)))
+    //Store the output of ReducersJob2 which will be input for MappersJob2_Chain
     FileOutputFormat.setOutputPath(job2, new Path(args(1) + "/IntermediateResult"))
     job2.waitForCompletion(true)
 
     logger.info("----------------------------------Starting Job 2.2------------------------------------------------")
     val job2_2 = Job.getInstance(new Configuration(), "basic2")
     job2_2.setJarByClass(this.getClass)
+
     //Setting mapper
-    job2_2.setMapperClass(classOf[MappersJob2_2])
+    job2_2.setMapperClass(classOf[MappersJob2_Chain])
+    //Setting Comparator Class to sort in descending order
     job2_2.setSortComparatorClass(classOf[ValueComparator])
+    //Setting output key and value class
     job2_2.setMapOutputKeyClass(classOf[Text])
     job2_2.setMapOutputValueClass(classOf[Text])
 
     //Setting reducer
-    job2_2.setReducerClass(classOf[ReducersJob2_2])
+    job2_2.setReducerClass(classOf[ReducersJob2_Chain])
+    //Setting output key and value class
     job2_2.setOutputKeyClass(classOf[Text])
     job2_2.setOutputValueClass(classOf[Text])
 
@@ -81,12 +90,15 @@ object RunJobs {
     // injected string instances of the designated regex pattern for these log message type
     val job3 = Job.getInstance(new Configuration(), "basic3")
     job3.setJarByClass(this.getClass)
+
     //Setting mapper
     job3.setMapperClass(classOf[MappersJob3])
+    //Setting Combiner
     job3.setCombinerClass(classOf[ReducersJob3])
 
     //Setting reducer
     job3.setReducerClass(classOf[ReducersJob3])
+    //Setting output key and value class
     job3.setOutputKeyClass(classOf[Text])
     job3.setOutputValueClass(classOf[IntWritable])
 
@@ -100,12 +112,15 @@ object RunJobs {
     // injected string instances of the designated regex pattern for these log message type
     val job4 = Job.getInstance(new Configuration(), "basic4")
     job4.setJarByClass(this.getClass)
+
     //Setting mapper
     job4.setMapperClass(classOf[MappersJob4])
+    //Setting Combiner
     job4.setCombinerClass(classOf[ReducersJob4])
 
     //Setting reducer
     job4.setReducerClass(classOf[ReducersJob4])
+    //Setting output key and value class
     job4.setOutputKeyClass(classOf[Text])
     job4.setOutputValueClass(classOf[IntWritable])
 

@@ -10,7 +10,7 @@ import scala.runtime.stdLibPatches.Predef.assert
 class MRTest extends AnyFlatSpec with Matchers{
 
   val pattern = HelperUtils.Parameters.generatingPattern.r
-  val filename = "log/LogFileGenerator.2021-10-06.log"
+  val filename = "log/LogFileGenerator.2021-10-18.log"
   val lines = Source.fromFile(filename).getLines.toList
 
   //Test 1
@@ -44,19 +44,18 @@ class MRTest extends AnyFlatSpec with Matchers{
   }
 
   //Test 5
-  it should "check if no of ERROR messages are greater than 0 " in {
-    val txt = "[scala-execution-context-global-173]"
+  it should "check if no of ERROR messages is equal to that from the Map Reduce Job3 " in {
     val buf = scala.collection.mutable.ListBuffer.empty[Int]
     lines.foreach(line => {
       val logEntry = line.split(" - ").map(_.trim)
       val logParser = logEntry(0).replace("  ", " ").split(" ").map(_.trim)
       val logMsgType = logParser(2)
-      if (line.contains(txt) && logMsgType=="ERROR" && pattern.findFirstIn(line) != None) {
+      if (logMsgType=="ERROR" && pattern.findFirstIn(line) != None) {
         buf += 1
       }
     })
 
-    buf.size === 2958
+    buf.size === 26779
   }
 
 }

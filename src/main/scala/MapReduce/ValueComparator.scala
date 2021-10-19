@@ -10,6 +10,7 @@ class ValueComparator extends WritableComparator(classOf[Text], true){
     val key1 = a.toString.toInt
     val key2 = b.toString.toInt
 
+    //Return the value in descending order
     -1*key1.compareTo(key2)
   }
 }
