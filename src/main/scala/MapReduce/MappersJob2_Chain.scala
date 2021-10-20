@@ -17,7 +17,7 @@ class MappersJob2_Chain extends Mapper[Object, Text, Text, Text]{
     logger.info("Starting Mapper Execution")
 
     //Read key,value output of ReducerJob2 and parse it as input here
-    val text = value.toString.split("\t")
+    val text = value.toString.split(",")
     val k = text(0)   // key(time)
     val v = text(1)   // value(count)
 
