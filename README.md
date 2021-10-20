@@ -100,18 +100,18 @@ Log file generated after running the GenerateLogData scala object. This file is 
 **MRTest** - Defines 5 integration tests for testing the functionality of Map Reduce Jobs
 
 
-#Map Reduce Operations
+# Map Reduce Operations
 
-###Hadoop Directory
+### Hadoop Directory
 
 ![](output_photos/Input_Output_Directory_HDFS.png)
 
-###Input File Directory
+### Input File Directory
 
 ![](output_photos/Input_File_HDFS.png)
 
 
-###Output File Directory
+### Output File Directory
 
 Job 1 output stored in **/output/Job1**
 
