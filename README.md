@@ -1,4 +1,5 @@
-#Logs MapReduce
+
+# Logs MapReduce
 
 The project aims at creating a map/reduce program for parallel processing of the randomly generated logs.
 
