@@ -25,9 +25,17 @@ class MappersJob1 extends Mapper[LongWritable, Text, Text, IntWritable] {
   //Assign value for Map
   val one = new IntWritable(1)
 
+  //Generate random start time for the analysis
   val r = new scala.util.Random(HelperUtils.Parameters.randomSeed)
   val hrs_start = 20+r.nextInt(2)
   val mins_start = r.nextInt(45)
+
+  logger.info("Starting Time is ----> " + hrs_start+":"+mins_start)
+
+  //Fetch time interval across which MapReduce has to run
+  val mins_end = mins_start + HelperUtils.Parameters.timeInterval
+  logger.info("Ending Time is ----> " + hrs_start+":"+mins_end)
+
 
   override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, Text, IntWritable]#Context): Unit = {
 
@@ -35,18 +43,6 @@ class MappersJob1 extends Mapper[LongWritable, Text, Text, IntWritable] {
     //Read file and convert to String List
     val fileContent = value.toString.split("\n").toList
 
-    //Fetch first item of list
-    val first_entry = fileContent.head
-
-    //Fetch hours and minutes of the 1st log entry
-//    val hrs_start = first_entry.take(2).toInt
-//    val mins_start = first_entry.substring(3, 5).toInt
-
-    logger.info("Starting Time is ----> " + hrs_start+":"+mins_start)
-
-    //Fetch time interval across which MapReduce has to run
-    val mins_end = mins_start + HelperUtils.Parameters.timeInterval
-    logger.info("Ending Time is ----> " + hrs_start+":"+mins_end)
     //Loop through each list item
     fileContent.foreach(line => {
       //Check if Pattern exists in the log entry
