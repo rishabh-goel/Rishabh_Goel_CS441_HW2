@@ -20,17 +20,26 @@ class MRTest extends AnyFlatSpec with Matchers{
   }
 
   //Test 2
-  it should "check if pattern exist" in {
-    pattern.findFirstIn("Xu3`?sDn.$YVb!mwE$$#N>VP8lce1ag0ae0cf3be2A7fcg3bf3T'HnFt8r9c'v^<^yx4q-x}5)") should not be (null)
-  }
-
-  //Test 3
   it should "check if log file is not empty" in {
     lines.size > 0
   }
 
+
+  //Test 3
+  it should "check if pattern exist in the log file" in {
+    //pattern.findFirstIn("Xu3`?sDn.$YVb!mwE$$#N>VP8lce1ag0ae0cf3be2A7fcg3bf3T'HnFt8r9c'v^<^yx4q-x}5)") should not be (null)
+    val buf = scala.collection.mutable.ListBuffer.empty[Int]
+    lines.take(100).foreach(line =>{
+      if(pattern.findFirstIn(line) != None)
+      {
+          buf += 1
+      }
+    })
+    buf.size > 0
+  }
+
   //Test 4
-  it should "check distinct error messages" in {
+  it should "check distinct log message types" in {
     lines.foreach(line => {
       if (pattern.findFirstIn(line) != None) {
         val logEntry = line.split(" - ").map(_.trim)
@@ -44,7 +53,7 @@ class MRTest extends AnyFlatSpec with Matchers{
   }
 
   //Test 5
-  it should "check if no of ERROR messages is equal to that from the Map Reduce Job3 " in {
+  it should "check if no of ERROR messages is equal to that from the Map Reduce Job3 output" in {
     val buf = scala.collection.mutable.ListBuffer.empty[Int]
     lines.foreach(line => {
       val logEntry = line.split(" - ").map(_.trim)
