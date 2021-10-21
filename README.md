@@ -19,7 +19,7 @@ number of characters in the detected instances of the designated regex pattern.
 # Setting up the environment
 #### Compiling code and generating jar file
 
-Traverse to the root directory of the project and compile the code and create jar of the application using the below commands:
+Clone the repository from Github. Traverse to the root directory of the project and compile the code and create jar of the application using the below commands:
 ```sh
 $ sbt clean compile assembly
 ```
